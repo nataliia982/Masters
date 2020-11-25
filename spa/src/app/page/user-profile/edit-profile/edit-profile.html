@@ -1,0 +1,133 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet ">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="{{ userOriginal.profileImageUrl || 'assets/layouts/layout/img/default-no-profile-pic.jpg' }}" class="img-responsive" alt="" />
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name"> {{ userOriginal.name }} {{ userOriginal.surname }} </div>
+                    <div class="profile-usertitle-job"> {{ userOriginal.position }} </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR BUTTONS -->
+                <br>
+                <!-- END SIDEBAR BUTTONS -->
+
+            </div>
+            <!-- END PORTLET MAIN -->
+        </div>
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN PROFILE CONTENT -->
+        <div class="profile-content">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption caption-md">
+                                <i class="icon-globe theme-font hide"></i>
+                                <span class="caption-subject font-blue-madison bold uppercase">Profile Account</span>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#tab_1_1" data-toggle="tab">Personal Info</a>
+                                </li>
+                                <li>
+                                    <a href="#tab_1_3" data-toggle="tab">Change Password</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="tab-content">
+                                <!-- PERSONAL INFO TAB -->
+                                <div class="tab-pane active" id="tab_1_1">
+                                    <form #editProfileForm="ngForm" (ngSubmit)="onSaveChanges()" >
+                                        <div class="form-group">
+                                            <label class="control-label"> First name </label>
+                                            <input [(ngModel)]="user.name" name="firstname" #firstname="ngModel" type="text" placeholder="First name" class="form-control" required/>
+                                            <small [hidden]="firstname.valid || firstname.pristine" class="text-danger">First name is required</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Last name </label>
+                                            <input [(ngModel)]="user.surname" name="lastname" #lastname="ngModel" type="text" placeholder="Last name" class="form-control" required />
+                                            <small [hidden]="lastname.valid || lastname.pristine" class="text-danger">Last name is required</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Mobile number </label>
+                                            <input [(ngModel)]="user.phone" name="phone" type="text" placeholder="Mobile number" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Position </label>
+                                            <input [(ngModel)]="user.position" name="position" type="text" placeholder="Position" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> City </label>
+                                            <input [(ngModel)]="user.city" name="city" type="text" placeholder="City" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Personal website </label>
+                                            <input [(ngModel)]="user.websiteLink" name="website" type="text" placeholder="Website link" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Facebook </label>
+                                            <input [(ngModel)]="user.facebookLink" name="facebook" type="text" placeholder="Facebook link" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"> Twitter </label>
+                                            <input [(ngModel)]="user.twitterLink" name="twitter" type="text" placeholder="Twitter link" class="form-control" />
+                                        </div>
+
+                                        <div class="margiv-top-10">
+                                            <button type="submit" class="btn green" [disabled]="!editProfileForm.form.valid"> Save Changes </button>
+
+                                            <!--<a (click)="onSaveChanges()" [disabled]="!editProfileForm.form.valid" class="btn green"> Save Changes </a>-->
+                                            <a (click)="onCancel()" class="btn default"> Cancel </a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- END PERSONAL INFO TAB -->
+                                <!-- CHANGE PASSWORD TAB -->
+                                <div class="tab-pane" id="tab_1_3">
+                                    <form #changePasswordForm="ngForm" (ngSubmit)="editPassword(changePasswordForm)">
+                                        <div class="form-group">
+                                            <label class="control-label">Current Password</label>
+                                            <input  type="password" class="form-control" autocomplete="off" 
+                                                   [(ngModel)]="user.password" name="password" #password="ngModel" disabled="true"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">New Password</label>
+                                            <input [(ngModel)]="newPassword" type="password" class="form-control" autocomplete="off"
+                                                   name="nPassword" #nPassword="ngModel" required validateEqual="rpassword" reverse="true" />
+                                            <small [hidden]="nPassword.valid || nPassword.pristine" class="text-danger">Password is required</small>
+                                            <!--<small [hidden]="(password.pristine)" class="text-danger">testttt</small>-->
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Re-type New Password</label>
+                                            <input [(ngModel)]="passwordConfirmation" type="password" class="form-control" autocomplete="off"
+                                                   name="rpassword" #rpassword="ngModel" required validateEqual="nPassword" reverse="false" />
+                                            <small [hidden]="rpassword.valid || rpassword.pristine" class="text-danger">Password mismatch</small>
+                                        </div>
+                                        <div class="margin-top-10">
+                                            <button type="submit" class="btn green" [disabled]="!changePasswordForm.form.valid"> Change Password </button>
+                                            <a (click)="onCancel()" class="btn default"> Cancel </a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- END CHANGE PASSWORD TAB -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+</div>

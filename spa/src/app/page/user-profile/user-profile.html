@@ -1,0 +1,175 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet " *ngIf="currentUser.role === 'Admin'">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="{{ user.profileImageUrl || 'assets/layouts/layout/img/default-no-profile-pic.jpg' }}"
+                        class="img-responsive" alt="" />
+                    <!--<img src="assets/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">-->
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name"> {{ user.name }} {{ user.surname }} </div>
+                    <div class="profile-usertitle-job"> {{ user.position }} </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR BUTTONS -->
+                <div *ngIf="currentUser.login !== user.login" class="profile-userbuttons">
+                    <!-- <button type="button" class="btn btn-circle green btn-sm">Add as a friend</button> -->
+                    <button type="button" class="btn btn-circle green btn-sm" (click)="onSendMessage()">Message</button>
+                    <button *ngIf="currentUser.role == 'Admin' && !user.isBanned" type="button"
+                        class="btn btn-circle red btn-sm" (click)="onBanUser(user.id, true)">Ban User</button>
+                    <button *ngIf="currentUser.role == 'Admin' && user.isBanned" type="button"
+                        class="btn btn-circle red btn-sm" (click)="onBanUser(user.id, false)">Unban User</button>
+                </div>
+                <!-- END SIDEBAR BUTTONS -->
+                <!-- SIDEBAR MENU -->
+                <div class="profile-usermenu">
+                    <ul class="nav"></ul>
+                </div>
+                <!-- END MENU -->
+            </div>
+            <div class="portlet light profile-sidebar-portlet " *ngIf="currentUser.role !== 'Admin'">
+            </div>
+            <!-- END PORTLET MAIN -->
+            <!-- PORTLET MAIN -->
+            <div class="portlet light ">
+                <div *ngIf="currentUser.role === 'Admin'">
+                    <h4 class="profile-desc-title">About {{ user.name }} {{ user.surname }}</h4>
+                    <div class="profile-desc-text">
+                        <ul class="list-inline margin-top-20">
+                            <li *ngIf="user.city">
+                                <i class="fa fa-map-marker"></i> {{ user.city }}
+                            </li>
+                            <li *ngIf="user.birthDate">
+                                <i class="fa fa-calendar"></i> {{ user.birthDate | date }}
+                            </li>
+                            <li *ngIf="user.position">
+                                <i class="fa fa-briefcase"></i> {{ user.position }}
+                            </li>
+                            <li *ngIf="user.phone">
+                                <i class="fa glyphicon-phone"></i> {{ user.phone }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngIf="user.websiteLink" class="margin-top-20 profile-desc-link">
+                        <i class="fa fa-globe"></i>
+                        <a href="javascript:;">{{user.websiteLink}}</a>
+                    </div>
+                    <div *ngIf="user.twitterLink" class="margin-top-20 profile-desc-link">
+                        <i class="fa fa-twitter"></i>
+                        <a href="javascript:;">@{{user.twitterLink}}</a>
+                    </div>
+                    <div *ngIf="user.facebookLink" class="margin-top-20 profile-desc-link">
+                        <i class="fa fa-facebook"></i>
+                        <a href="javascript:;">@{{user.facebookLink}}</a>
+                    </div>
+                </div>
+            </div>
+            <!-- END PORTLET MAIN -->
+        </div>
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN PROFILE CONTENT -->
+        <div class="profile-content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light portlet-fit ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <span class="caption-subject bold font-green uppercase"
+                                    *ngIf="currentUser.role === 'Admin'"> Відгуки </span>
+                                <span class="caption-subject bold font-green uppercase"
+                                    *ngIf="currentUser.role !== 'Admin'"> Написати Відгук </span>
+                            </div>
+                            <div class="actions">
+                                <div class="form-group">
+                                    <label></label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control input-circle-left"
+                                            [disabled]="currentUser.isBanned" [(ngModel)]="newFeedMessage.feedText"
+                                            (keyup.enter)="onPostMessage()" placeholder="Type here...">
+                                        <span class="input-group-addon input-circle-right" (click)="onPostMessage()">
+                                            <i class="fa fa-commenting-o"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="timeline" *ngIf="currentUser.role === 'Admin'">
+
+
+                                <!-- TIMELINE ITEM -->
+                                <div class="timeline-item" *ngFor="let feed of feedMessages">
+                                    <div class="timeline-badge">
+                                        <img class="timeline-badge-userpic"
+                                            src="{{feed.profileImageUrl || 'assets/layouts/layout/img/default-no-profile-pic.jpg'}}" />
+                                    </div>
+                                    <div class="timeline-body">
+                                        <div class="timeline-body-arrow"> </div>
+                                        <div class="timeline-body-head">
+                                            <div class="timeline-body-head-caption">
+                                                <a (click)="goToUser(feed.login)"
+                                                    class="timeline-body-title font-blue-madison">{{feed.name}}
+                                                    {{feed.surname}}</a>
+                                                <span class="timeline-body-time font-grey-cascade">
+                                                    {{feed.dateCreated | date:"MM/dd/yy, HH:mm:ss"}}
+                                                    <strong style="font-size: 10px; padding-left: 5px;"
+                                                        *ngIf="feed.wasEdited">edited</strong>
+                                                </span>
+                                            </div>
+                                            <div class="timeline-body-head-actions"
+                                                *ngIf="(feed.userId === currentUser.id || currentUser.role == 'Admin') && feed.id !== updateFeedMessage.id">
+                                                <div class="btn-group">
+                                                    <button
+                                                        class="btn btn-circle green btn-outline btn-sm dropdown-toggle"
+                                                        type="button" data-toggle="dropdown" data-hover="dropdown"
+                                                        data-close-others="true">
+                                                        Actions
+                                                        <i class="fa fa-angle-down"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right" role="menu">
+                                                        <li>
+                                                            <a (click)="onUpdateClick(feed)">Edit </a>
+                                                        </li>
+                                                        <li class="divider"> </li>
+                                                        <li>
+                                                            <a (click)="onDeletePostMessage(feed.id)">Delete</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-body-content">
+                                            <span *ngIf="feed.id !== updateFeedMessage.id" class="font-grey-cascade">
+                                                {{feed.feedText}}
+                                            </span>
+
+                                            <!-- Editing mode -->
+
+                                            <div *ngIf="feed.id === updateFeedMessage.id" class="input-icon right">
+                                                <i class="fa fa-times font-green" style="cursor: pointer;"
+                                                    title="cancel" (click)="onCancelClick(feed)"></i>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="updateFeedMessage.feedText"
+                                                    (keyup.enter)="onUpdatePostMessage(feed)">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END TIMELINE ITEM -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+</div>

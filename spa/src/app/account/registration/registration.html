@@ -1,0 +1,94 @@
+﻿<account-header></account-header>
+<!-- BEGIN REGISTRATION FORM -->
+<div class="content">
+    <form novalidate (ngSubmit)="onSignUp()" #registrationForm="ngForm">
+        <h3>Sign Up</h3>
+
+        <h5 *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</h5>
+
+        <p> Enter your personal details below: </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">First Name</label>
+            <div class="input-icon">
+                <i class="fa fa-font"></i>
+                <input [(ngModel)]="registrationProfile.name" class="form-control placeholder-no-fix" type="text" placeholder="First Name" 
+                       name="firstname" required #firstname="ngModel" />
+                <small [hidden]="firstname.valid || firstname.pristine" class="text-danger">First name is required</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Last Name</label>
+            <div class="input-icon">
+                <i class="fa fa-font"></i>
+                <input [(ngModel)]="registrationProfile.surname" class="form-control placeholder-no-fix" type="text" placeholder="Last Name" 
+                       name="lastname" required #lastname="ngModel" />
+                <small [hidden]="lastname.valid || lastname.pristine" class="text-danger">Last name is required</small>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Email</label>
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input [(ngModel)]="registrationProfile.email" class="form-control placeholder-no-fix" type="text" placeholder="Email" 
+                       name="email" required pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$" #email="ngModel" />
+                <small [hidden]="email.valid || email.pristine" class="text-danger">
+                    Email is required and format should be <i>john@doe.com</i>
+                </small>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Phone</label>
+            <div class="input-icon">
+                <i class="fa fa-mobile"></i>
+                <input [(ngModel)]="registrationProfile.phone" class="form-control placeholder-no-fix" type="text" placeholder="Phone" name="phone" />
+            </div>
+        </div>
+        <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">City</label>
+                <div class="input-icon">
+                    <i class="fa fa-mobile"></i>
+                    <input [(ngModel)]="registrationProfile.city" class="form-control placeholder-no-fix" type="text" placeholder="City" name="city" />
+                </div>
+            </div>
+        <p> Enter your account details below: </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Username</label>
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input [(ngModel)]="registrationProfile.login" class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" 
+                       name="username" required #username="ngModel" />
+                <small [hidden]="username.valid || username.pristine" class="text-danger">Username is required</small>            
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <div class="input-icon">
+                <i class="fa fa-lock"></i>
+                <input [(ngModel)]="registrationProfile.password" class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" 
+                       name="password" required validateEqual="rpassword" reverse="true" #password="ngModel" />
+                <small [hidden]="password.valid || password.pristine" class="text-danger">Password is required</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
+            <div class="controls">
+                <div class="input-icon">
+                    <i class="fa fa-check"></i>
+                    <input [(ngModel)]="passwordConfirmation" class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" 
+                           name="rpassword" required validateEqual="password" reverse="false" #rpassword="ngModel"/>
+                    <small [hidden]="rpassword.valid || rpassword.pristine" class="text-danger">Password mismatch</small>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button id="register-back-btn" type="button" class="btn red btn-outline" (click)="onBack()"> Back </button>
+            <button type="submit" id="register-submit-btn" class="btn green pull-right" [disabled]="!registrationForm.form.valid" > Sign Up </button>
+        </div>
+    </form>
+</div>
+<!-- END REGISTRATION FORM --> 
+<account-footer></account-footer>

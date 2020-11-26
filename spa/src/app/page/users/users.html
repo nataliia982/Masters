@@ -1,0 +1,69 @@
+﻿<!-- BEGIN PAGE TITLE-->
+<div class="row">
+    <div class="col-md-6">
+        <h1 class="page-title">
+            Users
+        </h1>
+    </div>
+    <div class="col-md-6">
+        <div class="page-title input-icon input-icon-lg right" style="margin:15px 0px;">
+            <i class="icon-magnifier"></i>
+            <input type="text" class="form-control input-lg" style="width: 100% !important;" placeholder="Search..." (keyup)="search($event.target.value)"> 
+        </div>
+    </div>
+    <div class="col-md-12" style="margin: 20px 10px;" *ngIf="currentUser == 'admin'">
+        <button type="button" class="btn btn-success btn-circle" style="width: 120px;" (click)="changeFilter(undefined)" [ngClass]="{'active': filter === undefined}">
+            All
+        </button>
+        <button type="button" class="btn btn-success btn-circle" style="width: 120px;" (click)="changeFilter(true)" [ngClass]="{'active': filter}">
+            Banned
+        </button>
+        <button type="button" class="btn btn-success btn-circle" style="width: 120px;" (click)="changeFilter(false)" [ngClass]="{'active': !!filter && !filter}">
+            Not banned
+        </button>
+    </div>
+</div>
+
+
+
+<!-- END PAGE TITLE-->
+
+<!-- BEGIN : USER CARDS -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-body">
+                <div class="mt-element-card mt-element-overlay">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let user of filteredUsers">
+                            <div class="mt-card-item">
+                                <div class="mt-card-avatar mt-overlay-1 profile-userpic">
+                                   <img src="{{ user.profileImageUrl || 'assets/layouts/layout/img/default-no-profile-pic.jpg' }}" />
+                                    <div class="mt-overlay">
+                                        <ul class="mt-info">
+                                            <li>
+                                                <a class="btn default btn-outline" (click)="onUserProfile(user)" >
+                                                    <i class="icon-user"></i>
+                                                </a>
+                                            </li>
+                                            <li *ngIf="user.login !== currentUser">
+                                                <a class="btn default btn-outline" (click)="onSendMessage(user.id)">
+                                                    <i class="icon-envelope"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-card-content">
+                                    <h3 class="mt-card-name">{{ user.name }} {{ user.surname }}</h3>
+                                    <p class="mt-card-desc font-grey-mint">{{ user.phone || 'no phone number' }}</p>
+                                </div>
+                            </div>
+                        </div>                      
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

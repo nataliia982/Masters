@@ -1,0 +1,78 @@
+﻿<div class="portlet light bordered" *ngIf="isChat">
+    <div class="portlet-title tabbable-line">
+        <div class="caption">
+            <i class="icon-bubbles font-dark hide"></i>
+            <span class="caption-subject font-dark bold uppercase">CHATS</span>
+        </div>
+
+    </div>
+    <div class="portlet-title tabbable-line">
+        <div class="page-title input-icon input-icon-lg right" style="margin:15px 0px;">
+            <i class="icon-magnifier"></i>
+            <input type="text" class="form-control input-lg" style="width: 100% !important;" placeholder="Search..." (keyup)="search($event.target.value)"> 
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="tab-content">
+            <div class="tab-pane active" id="portlet_comments_1">
+
+                <div class="mt-comments" *ngFor="let conversation of filteredConversations">
+                    <div class="mt-comment" *ngIf="conversation.lastMessageBody" (click)="onChatOpen(conversation.userId)">                        
+                        <a (click)="onUserProfile(conversation.userLogin)">
+                            <div class="mt-comment-img">
+                                <img src="{{ conversation.userImage || 'assets/layouts/layout/img/default-no-profile-pic.jpg' }}" style="width: 50px; float: left;">
+                            </div>
+                        </a>                        
+                        <div class="mt-comment-body">
+                            <div class="mt-comment-info">
+                                <a (click)="onUserProfile(conversation.userLogin)">
+                                    <span class="mt-comment-author"> {{ conversation.userName }} {{ conversation.userSurname }}</span>
+                                </a>
+                                <span class="mt-comment-date">{{ conversation.lastMessageDate | date:"MM/dd/yy, HH:mm:ss" }}</span>
+                            </div>
+                            <div class="mt-comment-text"> {{ conversation.lastMessageBody }} </div>
+                        </div>
+                    </div>
+                    <div>                        
+                        <button type="button" class="btn red btn-outline add-conv-btn" (click)="addConv(conversation)"> {{conversation.conversationText}} </button>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="selectedConversations != null && selectedConversations.length != 0">
+        <button type="button" class="btn btn-circle green btn-sm" (click)="showAllPart()">Show All Participants</button>        
+    </div>
+</div>
+
+<div class="portlet light bordered" *ngIf="!isChat">
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light portlet-fit bordered">
+                        <div class="portlet-body">
+                            <div class="mt-element-card mt-element-overlay">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" *ngFor="let user of selectedConversations">
+                                        <div class="mt-card-item">
+                                            <div class="mt-card-avatar mt-overlay-1 profile-userpic">
+                                               <img src="{{ user.userImage || 'assets/layouts/layout/img/default-no-profile-pic.jpg' }}" />
+                                                <div class="mt-overlay">
+                                                </div>
+                                            </div>
+                                            <div class="mt-card-content">
+                                                <h3 class="mt-card-name">{{ user.userName }} {{ user.userSurname }}</h3>
+                                            </div>
+                                        </div>
+                                    </div>                      
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <div>
+        <button type="button" class="btn btn-circle green btn-sm" (click)="cancelShowList()">Back</button>
+    </div>
+</div>
